@@ -1,5 +1,5 @@
 [aws]
-ows ansible_host=main01
+ows ansible_host=main04
 
 
 [aws:vars]
