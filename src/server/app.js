@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const errorHandler = require('./middleware/errorHandler');
 dotenv.config({ path: path.join(__dirname, '../config/.env') });
-
+require('dotenv').config({path: __dirname + '/.env'});
 global.BASEPATH = path.join(__dirname, '../../');
 global.NODE_ENV = process.env.NODE_ENV;
 
