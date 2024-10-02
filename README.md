@@ -1,1 +1,1 @@
-# ows
+# open wallet score
