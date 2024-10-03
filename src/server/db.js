@@ -7,7 +7,7 @@ exports.connectDB = async function connectDB() {
 	const password = encodeURIComponent(process.env.MONGO_PASSWORD);
 	const port = process.env.MONGO_PORT;
 	const authMechanism = 'DEFAULT';
-	const url = `mongodb://${user}:${password}@localhost:${port}/?authMechanism=${authMechanism}`;
+	const url = `mongodb://${user}:${password}@127.0.0.1:${port}/?authMechanism=${authMechanism}`;
 
 	if (!client) {
 		client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
