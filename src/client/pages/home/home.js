@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./style.css";
 import Result from "../../components/result";
-import { CgDarkMode } from 'react-icons/cg';
-import { MdLanguage } from 'react-icons/md';
-import { RiTwitterXFill } from 'react-icons/ri';
-import { useLang } from '../../hooks/localization';
-import { Timeline, Follow } from 'react-twitter-widgets'
-
+import {CgDarkMode} from 'react-icons/cg';
+import {MdLanguage} from 'react-icons/md';
+import {RiTwitterXFill} from 'react-icons/ri';
+import {useLang} from '../../hooks/localization';
+import {Timeline, Follow} from 'react-twitter-widgets'
+import axios from 'axios';
 
 export default function Home(props) {
 
-    const { lang, t, update } = useLang();
+    const {lang, t, update} = useLang();
+    const [address, setAddress] = useState('');
+    const [output, setOutput] = useState(null);
 
     useEffect(() => {
         let storedTheme = localStorage.getItem("theme");
@@ -43,25 +45,33 @@ export default function Home(props) {
         localStorage.setItem("theme", storedTheme);
     }
 
+    const handleInputChange = (event) => {
+        setAddress(event.target.value);
+        console.log(event.target.value);
+    }
+
+    const handleKeyDown = async (event) => {
+        if (event.key === 'Enter') {
+            if (address.length === 59) {
+                let result = await axios.get('/ows?address=' + address);
+                setOutput(result.data.data);
+                console.log(result.data.data);
+            } else {
+                setOutput(null);
+                console.log('No valid address found!!');
+            }
+        }
+    }
+
     return (
 
         <div className="w-full flex flex-col h-screen justify-between">
 
             <div className="navbar bg-base-300">
                 <div className="flex-1">
-                    <div className="text-primary text-2xl ml-1 font-bold">Open Wallet Score</div>
-                    
+                    <div className=" text-2xl ml-1 font-bold">Open Wallet Score</div>
                 </div>
-                <div className="dropdown dropdown-end">
 
-                    <button tabIndex={0} className="btn btn-square btn-ghost m-1">
-                        <MdLanguage className="h-6 w-6" />
-                    </button>
-                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-30">
-                        <li onClick={() => handleLang('en')}><a className={lang === 'en' ? 'bg-primary text-primary-content' : ''}>English</a></li>
-                        <li className="mt-1" onClick={() => handleLang('de')}><a className={lang === 'de' ? 'bg-primary text-primary-content' : ''}>German</a></li>
-                    </ul>
-                </div>
                 <div className="flex-none">
                     <button className="btn btn-square btn-ghost" onClick={handleDarkMode}>
                         <CgDarkMode className="h-6 w-6" />
@@ -70,19 +80,41 @@ export default function Home(props) {
             </div>
 
 
-            <div className="w-full flex justify-center mt-6">
-                <div className="w-11/12 flex flex-col items-center">
-                    <div className="hero ">
-                        <div className="hero-content w-full rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
-                            moo
+            <div className="w-full flex justify-center h-full">
+                <div className="w-6/12 flex flex-col items-center mt-60">
+                    <input
+                        type="text"
+                        placeholder="Insert stake address"
+                        className="input input-bordered w-full"
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                    />
+                    {output &&
+                        <div className="hero mt-10">
+                            <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
+                                <div>
+                                    <h1 className="text-2xl"> Open Wallet Score: {output.scores.openWalletScore}</h1>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
+                    {output &&
+                        <div className="hero mt-10">
+                            <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
+                                <div>
+                                    Blance Age Score: {output.scores.balanceScore} <br />
+                                    Delegation Age Score: {output.scores.delegationAgeScore} <br />
+                                    Wallet Age Score: {output.scores.walletAgeScore} <br />
+                                    Policy Count Score: {output.scores.policyCountScore} <br />
+                                    Transaction Score: {output.scores.txScore}
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
 
-            <div className="h-16">
-            
-            </div>
+
 
             <footer className="footer p-10 bg-base-300  mt-10">
                 <aside>
@@ -90,7 +122,7 @@ export default function Home(props) {
                         <p>Open Wallet Score<br />...</p>
                     </div>
                 </aside>
-                
+
                 <nav>
                     <header className="footer-title">center</header>
                     moo
@@ -98,7 +130,7 @@ export default function Home(props) {
                 <nav>
                     <header className="footer-title">right</header>
                     moo
-                   
+
                 </nav>
 
             </footer>

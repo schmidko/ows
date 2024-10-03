@@ -6,7 +6,6 @@ const router = express.Router();
 const path = require('path');
 
 router.get('/ping', async (req, res) => {
-		
 		res.json({"message":"pong"});
 	}
 );
@@ -20,7 +19,7 @@ router.get('/ows', async (req, res) => {
 		result = await collection.find(queryFind).toArray();
 	}
 	
-	res.json({"status": 1, result});
+	res.json({"status": 1, "data": result[0]});
 });
 
 router.get('*', (req, res) => {
