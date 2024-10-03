@@ -33,7 +33,7 @@
     - name: Copy env
       copy:
         src: "/home/mog/env/ows/.env"
-        dest: "/var/www/ows/.env"
+        dest: "/var/www/ows/src/config/.env"
         remote_src: true
     
     - name: Stop container
