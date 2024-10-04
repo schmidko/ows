@@ -4,6 +4,8 @@ services:
     image: "node"
     container_name: ows
     working_dir: /app
+    networks:
+      - ows
     environment:
       - NODE_ENV=production
     volumes:
