@@ -10,7 +10,7 @@ router.get('/ping', async (req, res) => {
 	}
 );
 
-router.get('/ows', async (req, res) => {
+router.get('/ows', async (req, res, next) => {
 	let result = {"status": 0, "message": "no Data"};
 	if (req.query.address) {
 		try {
@@ -20,6 +20,7 @@ router.get('/ows', async (req, res) => {
 			result = await collection.find(queryFind).toArray();
 		} catch(e) {
 			res.json({"status": 0, "message": "Database error!"});
+			next();
 		}
 	}
 	
