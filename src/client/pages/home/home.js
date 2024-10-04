@@ -55,7 +55,7 @@ export default function Home(props) {
         if (event.key === 'Enter') {
             if (address.length === 59) {
                 try {
-                    let result = await axios.get('/ows?address=' + address);
+                    let result = await axios.get('/ows?address=' + address, {timeout: 5000});
                     setOutput(result.data.data);
                     console.log(result.data.data);
                 } catch {
