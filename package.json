@@ -13,7 +13,7 @@
         "docker-start": "docker-compose up --build",
         "docker-stop": "docker-compose down",
         "docker-reset": "docker-compose down && docker system prune -a && docker volume prune",
-        "deploy-dev": "ansible-playbook -i server_config/inventory.yml server_config/deploy_dev.yml",
+        "deploy": "ansible-playbook -i server_config/inventory.yml server_config/deploy.yml",
         "analyse": "NODE_ENV=analyse webpack --config webpack.config.production.js"
     },
     "devDependencies": {
