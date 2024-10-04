@@ -19,12 +19,11 @@ router.get('/ows', async (req, res, next) => {
 			const queryFind = {"stakeAddress": req.query.address};
 			result = await collection.find(queryFind).toArray();
 		} catch(e) {
-			res.json({"status": 0, "message": "Database error!"});
-			next();
+			return res.json({"status": 0, "message": "Database error!"});
 		}
 	}
 	
-	res.json({"status": 1, "data": result[0]});
+	return res.json({"status": 1, "data": result[0]});
 });
 
 router.get('*', (req, res) => {
