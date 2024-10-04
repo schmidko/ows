@@ -16,3 +16,7 @@ services:
 
 volumes:
   app:
+
+networks:
+  ows:
+    driver: bridge
