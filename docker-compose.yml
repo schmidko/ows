@@ -2,20 +2,17 @@ version: '3.7'
 services:
   node:
     image: "node"
-    container_name: ows
+    container_name: node
     working_dir: /app
-    networks:
-      - ows
     environment:
       - NODE_ENV=production
-    volumes:
-      - /var/www/ows:/app
     ports:
       - "5665:5665"
     command: sh -c "npm i && npm start"
-
-volumes:
-  app:
+    volumes:
+      - /var/www/ows:/app
+    networks:
+      - ows
 
 networks:
   ows:
