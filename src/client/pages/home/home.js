@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import axios from 'axios';
 import "./style.css";
 import Result from "../../components/result";
 import {CgDarkMode} from 'react-icons/cg';
@@ -6,7 +7,7 @@ import {MdLanguage} from 'react-icons/md';
 import {RiTwitterXFill} from 'react-icons/ri';
 import {useLang} from '../../hooks/localization';
 import {Timeline, Follow} from 'react-twitter-widgets'
-import axios from 'axios';
+
 
 export default function Home(props) {
 
@@ -53,9 +54,13 @@ export default function Home(props) {
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             if (address.length === 59) {
-                let result = await axios.get('/ows?address=' + address);
-                setOutput(result.data.data);
-                console.log(result.data.data);
+                try {
+                    let result = await axios.get('/ows?address=' + address);
+                    setOutput(result.data.data);
+                    console.log(result.data.data);
+                } catch {
+                    console.log('Error when calling /ows endpoint!');
+                }
             } else {
                 setOutput(null);
                 console.log('No valid address found!!');
@@ -113,7 +118,6 @@ export default function Home(props) {
                     }
                 </div>
             </div>
-
 
 
             <footer className="footer p-10 bg-base-300  mt-10">

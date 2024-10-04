@@ -13,10 +13,14 @@ router.get('/ping', async (req, res) => {
 router.get('/ows', async (req, res) => {
 	let result = {"status": 0, "message": "no Data"};
 	if (req.query.address) {
-		const {db} = await connectDB();
-		const collection = db.collection("addresses");
-		const queryFind = {"stakeAddress": req.query.address};
-		result = await collection.find(queryFind).toArray();
+		try {
+			const {db} = await connectDB();
+			const collection = db.collection("addresses");
+			const queryFind = {"stakeAddress": req.query.address};
+			result = await collection.find(queryFind).toArray();
+		} catch(e) {
+			res.json({"status": 0, "message": "Database error!"});
+		}
 	}
 	
 	res.json({"status": 1, "data": result[0]});
