@@ -13,6 +13,8 @@ services:
       - /var/www/ows:/app
     networks:
       - ows
+    extra_hosts:
+      - "host.docker.internal:<docker0 IP>"
 
 networks:
   ows:
