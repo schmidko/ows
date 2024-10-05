@@ -14,7 +14,7 @@ services:
     networks:
       - ows
     extra_hosts:
-      - "host.docker.internal:<docker0 IP>"
+      - "host.docker.internal:172.17.0.1"
 
 networks:
   ows:
