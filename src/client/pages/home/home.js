@@ -13,7 +13,7 @@ export default function Home(props) {
 
     const {lang, t, update} = useLang();
     const [address, setAddress] = useState('');
-    const [output, setOutput] = useState(null);
+    const [output, setOutput] = useState({"status": 0});
 
     useEffect(() => {
         let storedTheme = localStorage.getItem("theme");
@@ -48,21 +48,26 @@ export default function Home(props) {
 
     const handleInputChange = (event) => {
         setAddress(event.target.value);
-        console.log(event.target.value);
     }
 
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
-            if (address.length === 59) {
+            if (address.length === 59 || address.length === 103) {
                 try {
                     let result = await axios.get('/ows?address=' + address, {timeout: 5000});
-                    setOutput(result.data.data);
-                    console.log(result.data.data);
+                    if (result.data?.status === 1) {
+                        if (result.data?.data?.scores?.openWalletScore) {
+                            setOutput({"status": 1, "data": result.data.data});
+                            console.log(result.data.data);
+                        } else {
+                            setOutput({"status": 9});  
+                        }
+                    }
                 } catch {
                     console.log('Error when calling /ows endpoint!');
                 }
             } else {
-                setOutput(null);
+                setOutput({"status": 9});
                 console.log('No valid address found!!');
             }
         }
@@ -84,7 +89,6 @@ export default function Home(props) {
                 </div>
             </div>
 
-
             <div className="w-full flex justify-center h-full">
                 <div className="w-6/12 flex flex-col items-center mt-60">
                     <input
@@ -94,24 +98,33 @@ export default function Home(props) {
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                     />
-                    {output &&
-                        <div className="hero mt-10">
-                            <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
-                                <div>
-                                    <h1 className="text-2xl"> Open Wallet Score: {output.scores.openWalletScore}</h1>
+                    {output.status === 1 &&
+                        <>
+                            <div className="hero mt-10">
+                                <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
+                                    <div>
+                                        <h1 className="text-2xl"> Open Wallet Score: {output.data.scores.openWalletScore}</h1>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div className="hero mt-10">
+                                <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
+                                    <div>
+                                        Blance Age Score: {output.data.scores.balanceScore} <br />
+                                        Delegation Age Score: {output.data.scores.delegationAgeScore} <br />
+                                        Wallet Age Score: {output.data.scores.walletAgeScore} <br />
+                                        Policy Count Score: {output.data.scores.policyCountScore} <br />
+                                        Transaction Score: {output.data.scores.txScore}
+                                    </div>
+                                </div>
+                            </div>
+                        </>
                     }
-                    {output &&
+                    {output.status === 9 &&
                         <div className="hero mt-10">
                             <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
                                 <div>
-                                    Blance Age Score: {output.scores.balanceScore} <br />
-                                    Delegation Age Score: {output.scores.delegationAgeScore} <br />
-                                    Wallet Age Score: {output.scores.walletAgeScore} <br />
-                                    Policy Count Score: {output.scores.policyCountScore} <br />
-                                    Transaction Score: {output.scores.txScore}
+                                    <h1 className="text-2xl"> No data found!</h1>
                                 </div>
                             </div>
                         </div>

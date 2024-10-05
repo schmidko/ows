@@ -47,6 +47,7 @@
         "immer": "^8.0.1",
         "mongodb": "^3.6.5",
         "nodemon": "^2.0.19",
+        "pg": "^8.13.0",
         "postcss": "^8.4.31",
         "postcss-loader": "^7.3.3",
         "prop-types": "^15.8.1",

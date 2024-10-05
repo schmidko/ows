@@ -9,7 +9,6 @@ exports.connectDB = async function connectDB() {
 	const port = process.env.MONGO_PORT;
 	const authMechanism = 'DEFAULT';
 	const url = `mongodb://${user}:${password}@${host}:${port}/?authMechanism=${authMechanism}`;
-console.log('oo', url);
 
 	if (!client) {
 		client = await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
