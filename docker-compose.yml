@@ -16,18 +16,18 @@ services:
     extra_hosts:
       - "host.docker.internal:152.53.38.8"
 
-  # mongodb:
-  #   image: mongo:latest
-  #   container_name: mongodb
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: knut
-  #   ports:
-  #     - 27055:27017
-  #   volumes:
-  #     - /home/mog/mongo_data:/data/db
-  #   networks:
-  #     - ows
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: knut
+    ports:
+      - 27055:27017
+    volumes:
+      - /home/mog/mongo_data:/data/db
+    networks:
+      - ows
       
 networks:
   ows:
