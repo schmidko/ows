@@ -55,8 +55,14 @@ export default function Home(props) {
                     let result = await axios.get('/ows?address=' + address, {timeout: 5000});
                     if (result.data?.status === 1) {
                         if (result.data?.data?.scores?.openWalletScore) {
+
+                            let dateView = "never";
+                            if (result.data.data.firstDelegation) {
+                                dateView = new Date(output.data.firstDelegation).toLocaleDateString('en-GB');
+                            }
+                            result.data.data['dateView'] = dateView;
                             setOutput({"status": 1, "data": result.data.data});
-                            console.log(result.data.data);
+                            
                         } else {
                             setOutput({"status": 9});
                         }
@@ -73,16 +79,16 @@ export default function Home(props) {
 
     return (
 
-        <div className="w-full h-screen flex flex-col justify-between">
+        <div className="w-full h-screen flex flex-col justify-between font-roboto">
 
             <div className="navbar bg-base-300 flex flex-row justify-between">
                 <div className="flex flex-col items-start">
-                    <div className="text-2xl ml-1 font-bold text-neutral">OWS</div>
-                    <div className="text-l ml-1 text-neutral">Open Wallet Score</div>
+                    <div className="text-2xl ml-1 font-bold">OWS</div>
+                    <div className="text-l ml-1">Open Wallet Score</div>
                 </div>
 
                 <div className="flex-none">
-                    <button className="btn btn-square btn-ghost text-neutral" onClick={handleDarkMode}>
+                    <button className="btn btn-square btn-ghost text-base-content" onClick={handleDarkMode}>
                         <CgDarkMode className="h-6 w-6" />
                     </button>
                 </div>
@@ -102,10 +108,10 @@ export default function Home(props) {
                             <div className="hero mt-10 ">
                                 <div className="hero-content rounded-lg flex-col lg:flex-row border-solid border-2 border-base-300">
                                     <div className="mb-5">
-                                        <div className="text-2xl text-neutral">It looks like you are sending to wallet created on {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}. It holds {output.data.balanceAda} ADA and has transacted a total of {output.data.transactionCount} times.</div>
-                                        <div className="text-xl mt-4">Wallet age: {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}</div>
+                                        <div className="text-2xl text-base-content">It looks like you are sending to wallet created on {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}. It holds {output.data.balanceAda} ADA and has transacted a total of {output.data.transactionCount} times.</div>
+                                        <div className="text-xl mt-8">Wallet age: {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}</div>
                                         <div className="text-xl">Balance: {output.data.balanceAda}</div>
-                                        <div className="text-xl">Staked since: {new Date(output.data.firstDelegation).toLocaleDateString('en-GB')}</div>
+                                        <div className="text-xl">Staked since: {output.data.dateView}</div>
                                         <div className="text-xl ">Total transactions: {output.data.transactionCount}</div>
                                     </div>
                                 </div>
@@ -136,7 +142,7 @@ export default function Home(props) {
             </div>
 
 
-            <footer class="footer footer-center bg-base-300 text-base-content p-4">
+            <footer className="footer footer-center bg-base-300 text-base-content p-4">
                 <aside>
                     <p>OpenWalletScore.com</p>
                 </aside>
