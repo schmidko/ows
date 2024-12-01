@@ -13,7 +13,7 @@ router.get('/ows', async (req, res, next) => {
 	let output = {status: 0};
 	if (req.query.address) {
 		const result = await getOwsData(req.query.address);
-		console.log('dd', result);
+		//console.log('dd', result);
 		
 		if (result) {
 			output = {"status": 1, "data": result[0]};

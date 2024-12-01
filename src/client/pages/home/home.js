@@ -4,9 +4,7 @@ import "./style.css";
 import Result from "../../components/result";
 import {CgDarkMode} from 'react-icons/cg';
 import {MdLanguage} from 'react-icons/md';
-import {RiTwitterXFill} from 'react-icons/ri';
 import {useLang} from '../../hooks/localization';
-import {Timeline, Follow} from 'react-twitter-widgets'
 
 
 export default function Home(props) {
@@ -60,7 +58,7 @@ export default function Home(props) {
                             setOutput({"status": 1, "data": result.data.data});
                             console.log(result.data.data);
                         } else {
-                            setOutput({"status": 9});  
+                            setOutput({"status": 9});
                         }
                     }
                 } catch {
@@ -75,39 +73,44 @@ export default function Home(props) {
 
     return (
 
-        <div className="w-full flex flex-col h-screen justify-between">
+        <div className="w-full h-screen flex flex-col justify-between">
 
-            <div className="navbar bg-base-300">
-                <div className="flex-1">
-                    <div className=" text-2xl ml-1 font-bold">Open Wallet Score</div>
+            <div className="navbar bg-base-300 flex flex-row justify-between">
+                <div className="flex flex-col items-start">
+                    <div className="text-2xl ml-1 font-bold text-neutral">OWS</div>
+                    <div className="text-l ml-1 text-neutral">Open Wallet Score</div>
                 </div>
 
                 <div className="flex-none">
-                    <button className="btn btn-square btn-ghost" onClick={handleDarkMode}>
+                    <button className="btn btn-square btn-ghost text-neutral" onClick={handleDarkMode}>
                         <CgDarkMode className="h-6 w-6" />
                     </button>
                 </div>
             </div>
 
             <div className="w-full flex justify-center h-full">
-                <div className="w-6/12 flex flex-col items-center mt-60">
+                <div className="w-5/12 flex flex-col items-center mt-60">
                     <input
                         type="text"
                         placeholder="Insert stake address"
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full text-xl"
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                     />
                     {output.status === 1 &&
                         <>
-                            <div className="hero mt-10">
-                                <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
-                                    <div>
-                                        <h1 className="text-2xl"> Open Wallet Score: {output.data.scores.openWalletScore}</h1>
+                            <div className="hero mt-10 ">
+                                <div className="hero-content rounded-lg flex-col lg:flex-row border-solid border-2 border-base-300">
+                                    <div className="mb-5">
+                                        <div className="text-2xl text-neutral">It looks like you are sending to wallet created on {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}. It holds {output.data.balanceAda} ADA and has transacted a total of {output.data.transactionCount} times.</div>
+                                        <div className="text-xl mt-4">Wallet age: {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}</div>
+                                        <div className="text-xl">Balance: {output.data.balanceAda}</div>
+                                        <div className="text-xl">Staked since: {new Date(output.data.firstDelegation).toLocaleDateString('en-GB')}</div>
+                                        <div className="text-xl ">Total transactions: {output.data.transactionCount}</div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="hero mt-10">
+                            {/* <div className="hero mt-10">
                                 <div className="hero-content rounded-lg bg-base-200 flex-col lg:flex-row shadow-md">
                                     <div>
                                         Blance Age Score: {output.data.scores.balanceScore} <br />
@@ -117,7 +120,7 @@ export default function Home(props) {
                                         Transaction Score: {output.data.scores.txScore}
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </>
                     }
                     {output.status === 9 &&
@@ -133,22 +136,10 @@ export default function Home(props) {
             </div>
 
 
-            <footer className="footer p-10 bg-base-300  mt-10">
+            <footer class="footer footer-center bg-base-300 text-base-content p-4">
                 <aside>
-                    <div className="flex flex-row">
-                    </div>
+                    <p>OpenWalletScore.com</p>
                 </aside>
-
-                <nav>
-                    <header className="footer-title"></header>
-                    
-                </nav>
-                <nav>
-                    <header className="footer-title"></header>
-                    
-
-                </nav>
-
             </footer>
         </div>
     );
