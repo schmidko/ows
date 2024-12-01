@@ -98,7 +98,7 @@ export default function Home(props) {
                 <div className="w-5/12 flex flex-col items-center mt-60">
                     <input
                         type="text"
-                        placeholder="Insert stake address"
+                        placeholder="Insert stake address or wallet address"
                         className="input input-bordered w-full text-xl"
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
