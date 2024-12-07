@@ -6,6 +6,8 @@ import {CgDarkMode} from 'react-icons/cg';
 import {MdLanguage} from 'react-icons/md';
 import {useLang} from '../../hooks/localization';
 
+// stake1uxsl0n7lhcrp6eya57zjq5s2q7ww020n44z3rfsf73868yqk97wp2
+
 
 export default function Home(props) {
 
@@ -47,6 +49,7 @@ export default function Home(props) {
     const handleInputChange = (event) => {
         setAddress(event.target.value);
     }
+console.log('ff', output);
 
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
@@ -55,14 +58,19 @@ export default function Home(props) {
                     let result = await axios.get('/ows?address=' + address, {timeout: 5000});
                     if (result.data?.status === 1) {
                         if (result.data?.data?.scores?.openWalletScore) {
-
                             let dateView = "never";
-                            if (result.data.data.firstDelegation) {
+                            const owsData = result.data.data;
+                            if (owsData.firstDelegation) {
                                 dateView = new Date(output.data.firstDelegation).toLocaleDateString('en-GB');
                             }
-                            result.data.data['dateView'] = dateView;
-                            setOutput({"status": 1, "data": result.data.data});
+                            owsData['dateView'] = dateView;
                             
+                            let poolText = "This wallet is not delegated to a pool.";
+                            if (owsData.poolInfo.delegated) {
+                                poolText = `This wallet is delegated to pool: ${owsData.poolInfo.name} [${owsData.poolInfo.ticker}]`;
+                            }
+                            owsData["poolText"] = poolText;
+                            setOutput({"status": 1, "data": owsData});
                         } else {
                             setOutput({"status": 9});
                         }
@@ -108,10 +116,11 @@ export default function Home(props) {
                             <div className="hero mt-10 ">
                                 <div className="hero-content rounded-lg flex-col lg:flex-row border-solid border-2 border-base-300">
                                     <div className="mb-5">
-                                        <div className="text-2xl text-base-content">It looks like you are sending to wallet created on {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}. It holds {output.data.balanceAda} ADA and has transacted a total of {output.data.transactionCount} times.</div>
+                                        <div className="text-2xl text-base-content">It looks like you are sending to wallet created on {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}. It holds {output.data.balanceAda} ADA and has transacted a total of {output.data.transactionCount} times. {output.data.poolText}</div>
                                         <div className="text-xl mt-8">Wallet age: {new Date(output.data.firstTransaction).toLocaleDateString('en-GB')}</div>
                                         <div className="text-xl">Balance: {output.data.balanceAda}</div>
                                         <div className="text-xl">Staked since: {output.data.dateView}</div>
+                                        {output.data.poolInfo.delegated && <div className="text-xl">Delegated to: {output.data.poolInfo.name} [{output.data.poolInfo.ticker}]</div>}
                                         <div className="text-xl ">Total transactions: {output.data.transactionCount}</div>
                                     </div>
                                 </div>
