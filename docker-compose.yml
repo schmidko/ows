@@ -2,7 +2,7 @@
 services:
   node:
     image: "node"
-    container_name: node
+    container_name: ows
     working_dir: /app
     environment:
       - NODE_ENV=production
